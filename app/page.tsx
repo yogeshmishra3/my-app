@@ -2,14 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-export default function Home() {
-  const [todos, setTodos] = useState([]);
+type Todo = {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
+export default function Home() {
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((response) => response.json())
-      .then((data) => setTodos(data.slice(0, 3)));
+      .then((data: Todo[]) => {
+        setTodos(data.slice(0, 3));
+      });
   }, []);
 
   return (
@@ -20,7 +28,7 @@ export default function Home() {
         </h1>
 
         <div className="flex flex-col gap-4">
-          {todos.map((todo) => (
+          {todos.map((todo: Todo) => (
             <div
               key={todo.id}
               className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-700"
